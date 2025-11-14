@@ -25,10 +25,13 @@ git checkout prepare_for_master
 ```
 
 1、打开XiUOS源码文件包可以看到以下目录：
+
 | 名称          | 说明                                                         |
 | ------------- | ------------------------------------------------------------ |
 | APP_Framework | 应用代码。                                                   |
 | Ubiquitous    | 板级支持包，支持NuttX、RT-Thread、XiZi_IIoT和XiZi_AIoT_Micro。 |
+
+
 
 2、打开XiZi_AIoT_Micro微内核源码文件包，可以看到以下目录：
 

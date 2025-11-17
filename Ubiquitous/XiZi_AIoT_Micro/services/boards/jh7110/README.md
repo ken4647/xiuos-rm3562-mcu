@@ -1,4 +1,4 @@
-# 从零开始构建矽璓微内核操作系统：risc-v架构StarFive开发板
+# 从零开始构建矽璓微内核操作系统：RISC-V架构StarFive开发板
 
 [XiUOS](http://xuos.io/) (X Industrial Ubiquitous Operating System) 矽璓XiUOS是一款面向智慧车间的工业物联网操作系统，主要由一个极简的微型实时操作系统内核和其上的工业物联框架构成，通过高效管理工业物联网设备、支撑工业物联应用，在生产车间内实现智能化的“感知环境、联网传输、知悉识别、控制调整”，促进以工业设备和工业控制系统为核心的人、机、物深度互联，帮助提升生产线的数字化和智能化水平。
 
@@ -17,7 +17,7 @@ $ sudo apt install gcc make libncurses5-dev openssl libssl-dev bison flex libelf
 
 ### 源码下载：
 
-下载源码，并切换分支prepare_for_master，命令如下：
+下载矽璓源码，并切换分支prepare_for_master，命令如下：
 
 ```c
 git clone https://gitlink.org.cn/xuos/xiuos.git
@@ -45,7 +45,7 @@ git checkout prepare_for_master
 
 
 
-# StarFive开发板
+# 赛昉科技StarFive开发板
 
 ## 1. 微处理器简介
 
@@ -56,13 +56,19 @@ git checkout prepare_for_master
 |主频| 1.5 GHz |
 |内存| 8GB |
 |存储| 16MB+TF卡 |
-| 外设 | UART |
+| 外设 | 目前仅支持UART调试 |
 
 ## 2. 编译说明
 
-编译工具链：
+下载RISC-V交叉编译工具链：
 
-`riscv64-unknown-elf-`
+`riscv64-unknown-elf-gcc`，链接：https://pan.baidu.com/s/1H1WQjQGLlT-xfg3-HWCu3Q 提取码：w2wn
+
+下载 riscv64-elf-ubuntu-20.04-nightly-2023.01.31-nightly.tar.gz，并解压到Ubuntu电脑，假设解压路径是`/home/data/riscv`。
+
+在Ubuntu环境的文件`~/.bashrc`中，添加环境变量：
+
+`PATH="/home/data/riscv/riscv64-elf-ubuntu-20.04-nightly-2023.01.31-nightly/bin:$PATH"`
 
 编译步骤：
 
@@ -81,15 +87,21 @@ XiZi-jh7110.bin
 
 ## 3. SD卡镜像
 
-SD卡格式需要格式为ext2格式。将SD卡插到Ubuntu电脑上，假设创建的节点是/dev/sdb，执行命令：
+SD卡格式需要格式为ext2格式。将SD卡插到Ubuntu电脑上（或Windows电脑的虚拟机中的Ubuntu系统），假设创建的节点是`/dev/sdb`，执行命令：
 
 `mkfs.ext2 /dev/sdb`
 
-然后，将XiZi-jh7110.bin拷贝到SD卡根目录。
+然后，将`XiZi-jh7110.bin`拷贝到SD卡根目录。
 
-## 4. 启动
+## 4. 开发板连线
 
-开发板串口在40-Pin GPIO 上，需要跳线连接。串口波特率（baud rate）设置为115,200。
+StarFive开发板硬件介绍，可查看官网资料：https://doc.rvspace.org/VisionFive2/Quick_Start_Guide/VisionFive2_QSG/hardware_overview.html；
+
+查看官网资料的产品框图和Pin图。
+
+开发板通过type-c端口供电。
+
+开发板调试串口在40-Pin GPIO 上，需要跳线连接。串口波特率（baud rate）设置为115,200。
 
 ```c
 Pin6 GND
@@ -97,11 +109,51 @@ Pin8 GPIO5 (UART TX)
 Pin10 GPIO6 (UART RX)
 ```
 
-![jh7110](img/jh7110.png)
+![jh7110_board](img/jh7110_board.png)
 
-将烧录好XiZi-jh7110.bin镜像的SD卡插入到开发板。
+## 5. Uboot适配XiZi
 
-设备上电，将会在串口终端上看到信息打印输出。输入命令查看内存、cpu、任务等信息。
+矽璓微内核的启动依赖于Uboot。下面介绍StarFive开发板Uboot代码获取、编译和烧录。
+
+StarFive开发板软件技术参考手册，可查看官网资料：https://doc.rvspace.org/VisionFive2/SW_TRM/VisionFive2_SW_TRM/compiling_u-boot_and_kernel%20-%20vf2.html；
+
+主要包括以下部分：设置编译环境、编译U-Boot（包含下载源代码）、创建SPL文件、编译OpenSBI、创建fw_payload文件。
+
+StarFive开发板更新Flash中的SPL和U-Boot，可查看官网资料：https://doc.rvspace.org/VisionFive2/Quick_Start_Guide/VisionFive2_SDK_QSG/updating_spl_and_u_boot%20-%20vf2.html；
+
+建议采用资料中的方法一：通过tftpboot命令更新SPL和U-Boot。
+
+为了方便管理Uboot适配XiZi的代码，我们基于StarFive官方提供的Uboot代码，创建了JH7110 Project仓库。
+
+下载JH7110 Project仓库下的分支uboot_xizi代码，命令如下：
+
+```c
+git clone -b uboot_xizi https://gitlink.org.cn/xuos/jh7110_project.git
+```
+
+uboot_xizi 主要修改：在Uboot的函数`main_loop`中，将原来启动Linux的命令替换为从SD卡加载`XiZi-jh7110.bin`并启动的命令。
+
+![uboot_xizi_code](img/uboot_xizi_code.png)
+
+建议使用JH7110 Project仓库的uboot_xizi分支的最新代码。
+
+重新编译烧录Uboot。详细步骤，可查看前面提到的官方资料，也可参考uboot_xizi目录下的文档`JH7110个人学习手册.docx`。
+
+## 6. XiZi启动
+
+将带有`XiZi-jh7110.bin`的SD卡插到开发板上。
+
+开发板上电，将会在串口终端上看到打印。
+
+Uboot启动的日志：
+
+![uboot_start](img/uboot_start.png)
+
+Uboot加载xizi的日志：
+
+![uboot_go_xizi](img/uboot_go_xizi.png)
+
+输入命令查看内存、cpu、任务等信息。
 
 ```c
 showMemInfo
@@ -109,32 +161,11 @@ showCpusInfo
 showTasks
 ```
 
-![terminal](img/terminal.png)
+![xizi_log](img/xizi_log.png)
 
-## 5. 内存分布
+## 7. 其他
 
 内存分布以及虚拟地址映射。
 
 ![memory_map](img/memory_map.png)
 
-## 6. uboot适配
-
-uboot源码下载，并切换分支uboot_xizi，命令如下：
-
-```c
-git clone https://gitlink.org.cn/xuos/jh7110_project.git
-git checkout uboot_xizi
-```
-
-JH7110的编译烧录详细步骤，查看uboot_xizi目录下的文档：
-
-```
-JH7110个人学习手册.docx
-```
-
-查看文档中的U-Boot和SPL部分：
-
-```
-1.2. 编译U-Boot和SPL
-2.3. 更新U-Boot和SPL
-```

@@ -35,6 +35,7 @@ Modification:
 
 /* physical memory layout */
 #define PHY_MEM_BASE            (0x0000000040200000ULL)
+#define PHY_KERN_STOP           (0x0000000080000000ULL)
 #define PHY_USER_FREEMEM_BASE   (0x0000000080000000ULL)
 #define PHY_USER_FREEMEM_TOP    (0x0000000200000000ULL)
 #define PHY_MEM_STOP            (0x0000000200000000ULL)

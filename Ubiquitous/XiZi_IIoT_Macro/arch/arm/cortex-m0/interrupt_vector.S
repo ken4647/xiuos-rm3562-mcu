@@ -63,15 +63,17 @@ Modification:
 // ensure that it ends up at physical address 0x0000.0000.
 //
 //*****************************************************************************
-.globl  InterruptVectors
+.globl   __Vectors
+.globl   __Vectors_End
+.globl   __Vectors_Size
 
 /******************************************************************************
 *******************************************************************************/
   .section  .isr_vector,"a",%progbits
-  .type  InterruptVectors, %object
-  .size  InterruptVectors, .-InterruptVectors
+  .type  __Vectors, %object
+  .size  __Vectors, .-__Vectors
 
-InterruptVectors:
+__Vectors:
   .word  _sp
   .word  Reset_Handler
   .word  NMI_Handler                  // NMI_Handler
@@ -120,3 +122,6 @@ InterruptVectors:
   .word  IsrEntry
   .word  IsrEntry
   .word  IsrEntry
+__Vectors_End:
+  .equ     __Vectors_Size, __Vectors_End - __Vectors
+  .size    __Vectors, . - __Vectors

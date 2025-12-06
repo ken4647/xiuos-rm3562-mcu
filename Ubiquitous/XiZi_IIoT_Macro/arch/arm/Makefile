@@ -76,10 +76,13 @@ SRC_DIR += cortex-m7
 endif
 
 
-
 # cortex-m0 is ARMv6-m
 
 ifeq ($(CONFIG_BOARD_CORTEX_M0_EVB),y)
+SRC_DIR += cortex-m0
+endif
+
+ifeq ($(CONFIG_BOARD_RK3562_MCU),y)
 SRC_DIR += cortex-m0
 endif
 

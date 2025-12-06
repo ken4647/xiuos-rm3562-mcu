@@ -20,7 +20,7 @@
 #define ARCH_IRQ_NUM_OFFSET 0
 
 #define SYSTICK_IRQN       15
-#define UART1_IRQn         18
+#define UART1_IRQN         18
 
 int32 ArchEnableHwIrq(uint32 irq_num);
 int32 ArchDisableHwIrq(uint32 irq_num);

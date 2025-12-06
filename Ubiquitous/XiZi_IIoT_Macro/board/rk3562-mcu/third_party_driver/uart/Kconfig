@@ -1,0 +1,15 @@
+menuconfig BSP_USING_UART9
+    bool "Enable UART9"
+    default n
+    if BSP_USING_UART9
+        config SERIAL_BUS_NAME_9
+            string "serial bus 9 name"
+            default "uart9"
+        config SERIAL_DRV_NAME_9
+            string "serial bus 9 driver name"
+            default "uart9_drv"
+        config SERIAL_9_DEVICE_NAME_0
+                string "serial bus 9 device 0 name"
+                default "uart9_dev0"   
+    endif
+

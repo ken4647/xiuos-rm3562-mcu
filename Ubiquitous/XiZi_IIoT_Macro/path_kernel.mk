@@ -639,6 +639,16 @@ KERNELPATHS += \
 	-I$(KERNEL_ROOT)/include #
 endif
 
+ifeq ($(BSP_ROOT),$(KERNEL_ROOT)/board/rk3562-mcu)
+KERNELPATHS += \
+	-I$(KERNEL_ROOT)/arch/arm/cortex-m0 \
+	-I$(BSP_ROOT)/third_party_driver \
+	-I$(BSP_ROOT)/include \
+	-I$(BSP_ROOT)/third_party_driver/include \
+	-I$(BSP_ROOT)/third_party_driver/hal/inc \
+	-I$(KERNEL_ROOT)/include #
+endif
+
 ifeq ($(BSP_ROOT),$(KERNEL_ROOT)/board/xishutong-arm32)
 KERNELPATHS += \
 	-I$(KERNEL_ROOT)/arch/arm/cortex-m4/hc32f4a0 \

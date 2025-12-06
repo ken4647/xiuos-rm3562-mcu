@@ -15,7 +15,7 @@
 #include <xs_assign.h>
 #include "svc_handle.h"
 #include <board.h>
-#include <shell.h>
+// #include <shell.h>
 #include <stdint.h>
 
 #if (defined ( __GNUC__ ) && defined ( __VFP_FP__ ) && !defined(__SOFTFP__))
@@ -409,4 +409,4 @@ __attribute__((weak)) void HwCpuReset(void)
 {
     SCB_AIRCR = SCB_RESET_VALUE;
 }
-SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC)|SHELL_CMD_PARAM_NUM(0), Reboot, HwCpuReset, reset machine );
+// SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC)|SHELL_CMD_PARAM_NUM(0), Reboot, HwCpuReset, reset machine );

@@ -1,0 +1,30 @@
+mainmenu "XiZi_IIoT Project Configuration"
+
+config BSP_DIR
+    string
+    option env="BSP_ROOT"
+    default "."
+
+config KERNEL_DIR
+    string
+    option env="KERNEL_ROOT"
+    default "../.."
+
+config BOARD_RK3562_MCU
+    bool
+    select  ARCH_ARM
+    default y
+
+source "$KERNEL_DIR/arch/Kconfig"
+
+menu "rk3562mcu feature"
+    source "$BSP_DIR/third_party_driver/Kconfig"
+
+endmenu
+
+
+menu "Hardware feature"
+source "$KERNEL_DIR/resources/Kconfig"
+endmenu
+
+source "$KERNEL_DIR/Kconfig"

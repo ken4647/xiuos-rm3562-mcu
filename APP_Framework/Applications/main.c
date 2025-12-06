@@ -12,7 +12,7 @@
 
 #include <stdio.h>
 #include <string.h>
-// #include <user_api.h>
+#include <user_api.h>
 #include <transform.h>
 
 #ifdef CONFIG_LIB_USING_PIKAPYTHON
@@ -39,6 +39,13 @@ int main(void)
 {
     printf("\nHello, world!\n");
     FrameworkInit();
+
+    int count = 0;
+    while(1) {
+        printf("XiUOS running...: %d\n", count++);
+        UserTaskDelay(1000);
+        // for(int i = 0; i < 10000; i++);
+    }
     
 #ifdef CONFIG_LIB_USING_PIKAPYTHON
     /* Initialize and run PikaPython */

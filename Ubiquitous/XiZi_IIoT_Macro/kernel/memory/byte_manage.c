@@ -656,14 +656,6 @@ void *x_malloc(x_size_t size)
         /* parameter detection */
         if ((size == 0) || (size > ByteManager.dynamic_buddy_manager.dynamic_buddy_end - ByteManager.dynamic_buddy_manager.dynamic_buddy_start - ByteManager.dynamic_buddy_manager.active_memory)) {
             FREE_LIST_UNLOCK(lock);
-            KPrintf("require size:%d\n", size);
-            KPrintf("dynamic_buddy_end:%d\n", ByteManager.dynamic_buddy_manager.dynamic_buddy_end);
-            KPrintf("dynamic_buddy_start:%d\n", ByteManager.dynamic_buddy_manager.dynamic_buddy_start);
-            KPrintf("active_memory:%d\n", ByteManager.dynamic_buddy_manager.active_memory);
-#ifdef TOOL_SHELL
-            extern int ShowTask();
-            ShowTask();
-#endif
             return NONE;
         }
 #endif

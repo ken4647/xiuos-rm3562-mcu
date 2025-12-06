@@ -1,0 +1,1 @@
+./mkimage -f ./image/amp.its -E -p 0xe00 amp.img

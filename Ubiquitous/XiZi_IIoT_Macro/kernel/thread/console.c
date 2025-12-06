@@ -31,12 +31,14 @@ static HardwareDevType _console = NONE;
  * Obtain the console
  *
  */
+#if defined(KERNEL_CONSOLE)
 HardwareDevType ObtainConsole(void)
 {
 #if defined(KERNEL_CONSOLE)
     return _console;
 #endif
 }
+#endif
 
 /**
  * Setup a console
@@ -62,6 +64,7 @@ void InstallConsole(const char *bus_name, const char *drv_name, const char *dev_
     console_bus = BusFind(bus_name);
     console_drv = BusFindDriver(console_bus, drv_name);
     console = BusFindDevice(console_bus, dev_name);
+    
 
     if (console != NONE) {
         if (_console != NONE) {
@@ -79,7 +82,7 @@ void InstallConsole(const char *bus_name, const char *drv_name, const char *dev_
         serial_dev_param->serial_set_mode = 0;
         serial_dev_param->serial_stream_mode = SIGN_OPER_STREAM;
         BusDevOpen(console);
-        _console = console;
+        _console = console;KPrintf("InstallConsole bus %s drv %s dev %s\n", bus_name, drv_name, dev_name);
     } else {
         console = _console;
     }

@@ -9,6 +9,8 @@
 #include "rpmsg_env.h"
 
 #include "hal_base.h"
+#include "xs_base.h"
+#include "xs_isr.h"
 
 #if defined(RL_USE_ENVIRONMENT_CONTEXT) && (RL_USE_ENVIRONMENT_CONTEXT == 1)
 #error "This RPMsg-Lite port requires RL_USE_ENVIRONMENT_CONTEXT set to 0"
@@ -106,6 +108,13 @@ static void platform_global_isr_enable(void)
 #endif
 }
 
+static void rpmsg_mbox_isr_wrapper(int irqn, void *param)
+{
+    KPrintf("rpmsg_mbox_isr_wrapper\n");
+    rpmsg_mbox_isr();
+}
+
+DECLARE_HW_IRQ(MBOX_BB_IRQn, rpmsg_mbox_isr_wrapper, NONE);
 int32_t platform_init_interrupt(uint32_t vector_id, void *isr_data)
 {
 #ifdef RL_PLATFORM_USING_MBOX
@@ -161,7 +170,7 @@ int32_t platform_init_interrupt(uint32_t vector_id, void *isr_data)
         }
         register_count++;
 #else
-        HAL_NVIC_SetIRQHandler(MBOX_BB_IRQn, rpmsg_mbox_isr);
+        // HAL_NVIC_SetIRQHandler(MBOX_BB_IRQn, rpmsg_mbox_isr);
         if (register_count % 2 == 0)
         {
             HAL_MBOX_Init(rl_pMBox, RL_MBOX_B2A);

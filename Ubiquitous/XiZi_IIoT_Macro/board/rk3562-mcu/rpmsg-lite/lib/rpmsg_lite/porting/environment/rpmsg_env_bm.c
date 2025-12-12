@@ -48,9 +48,11 @@
 #include "rpmsg_env.h"
 #include "rpmsg_platform.h"
 #include "virtqueue.h"
+#include "xs_memory.h"
 
 #include <stdlib.h>
 #include <string.h>
+#include <xizi.h>
 
 static int32_t env_init_counter = 0;
 
@@ -154,7 +156,7 @@ int32_t env_deinit(void)
  */
 void *env_allocate_memory(uint32_t size)
 {
-    return (malloc(size));
+    return (x_malloc(size));
 }
 
 /*!
@@ -166,7 +168,7 @@ void env_free_memory(void *ptr)
 {
     if (ptr != ((void *)0))
     {
-        free(ptr);
+        x_free(ptr);
     }
 }
 

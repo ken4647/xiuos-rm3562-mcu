@@ -34,6 +34,8 @@ Modification:
 #include "hal_base.h"
 #include "hal_bsp.h"
 #include "connect_uart.h"
+#include "xs_base.h"
+extern void RPMsgTask_Entry(void *param);
 
 void SysTickConfiguration(void)
 {
@@ -95,16 +97,17 @@ void InitBoardHardware()
 
     InitBoardMemory((void *)MEMORY_START_ADDRESS, (void *)MEMORY_END_ADDRESS);
 
+
 #ifdef KERNEL_CONSOLE
     InstallConsole(KERNEL_CONSOLE_BUS_NAME, KERNEL_CONSOLE_DRV_NAME, KERNEL_CONSOLE_DEVICE_NAME);
-
+    
+    KPrintf("memory address range: [0x%08x - 0x%08x]\n", (x_ubase)MEMORY_START_ADDRESS,
+            (x_ubase)MEMORY_END_ADDRESS);
     KPrintf("\nconsole init completed.\n");
     KPrintf("board initialization......\n");
 #endif
 
     KPrintf("board init done.\n");
     KPrintf("start kernel...\n");
-
-
 
 }

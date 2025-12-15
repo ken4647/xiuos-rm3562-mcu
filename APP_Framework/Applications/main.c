@@ -21,7 +21,7 @@
 
 extern int FrameworkInit();
 extern void ApplicationOtaTaskInit(void);
-extern void CreateRPMsgTask(void);
+extern void RPMsgTask_Entry(void *param);
 
 #ifdef CONFIG_LIB_USING_PIKAPYTHON
 /* PikaPython application interfaces */
@@ -70,9 +70,7 @@ int main(void)
     webserver();
 #endif
 
-    /* Auto start RPMSG task */
-    CreateRPMsgTask();
-
+    RPMsgTask_Entry(NULL);
     return 0;
 }
 // int cppmain(void);

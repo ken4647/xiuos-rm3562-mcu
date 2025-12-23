@@ -21,6 +21,7 @@
 
 extern int FrameworkInit();
 extern void ApplicationOtaTaskInit(void);
+extern void RPMsgTask_Entry(void *param);
 
 #ifdef CONFIG_LIB_USING_PIKAPYTHON
 /* PikaPython application interfaces */
@@ -40,12 +41,12 @@ int main(void)
     printf("\nHello, world!\n");
     FrameworkInit();
 
-    int count = 0;
-    while(1) {
-        printf("XiUOS running...: %d\n", count++);
-        UserTaskDelay(1000);
-        // for(int i = 0; i < 10000; i++);
-    }
+    // int count = 0;
+    // while(1) {
+    //     printf("XiUOS running...: %d\n", count++);
+    //     UserTaskDelay(1000);
+    //     // for(int i = 0; i < 10000; i++);
+    // }
     
 #ifdef CONFIG_LIB_USING_PIKAPYTHON
     /* Initialize and run PikaPython */
@@ -69,6 +70,7 @@ int main(void)
     webserver();
 #endif
 
+    RPMsgTask_Entry(NULL);
     return 0;
 }
 // int cppmain(void);

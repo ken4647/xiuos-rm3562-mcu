@@ -1,6 +1,6 @@
 menuconfig BSP_USING_UART9
     bool "Enable UART9"
-    default n
+    default y
     if BSP_USING_UART9
         config SERIAL_BUS_NAME_9
             string "serial bus 9 name"

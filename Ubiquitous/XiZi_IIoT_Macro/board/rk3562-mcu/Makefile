@@ -1,5 +1,5 @@
-SRC_FILES := board.c start_m0.S
+SRC_FILES := board.c start_m0.S rpmsg_remote.c
 
-SRC_DIR := third_party_driver
+SRC_DIR := third_party_driver rpmsg-lite
 
 include $(KERNEL_ROOT)/compiler.mk

@@ -128,7 +128,7 @@ SHELL_EXPORT_CMD(SHELL_CMD_PERMISSION(0)|SHELL_CMD_TYPE(SHELL_TYPE_CMD_FUNC)|SHE
 
 int main(void)
 {
-    printf("\nHello, world! %s\n" __TIME__);
+    printf("\nHello, world!\n");
     FrameworkInit();
     
 #ifdef CONFIG_LIB_USING_PIKAPYTHON
